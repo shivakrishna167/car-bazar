@@ -42,17 +42,21 @@ export default function Navbar() {
   return (
     <>
     {/* Main Navbar */}
-    <nav className="bg-secondary text-white fixed top-0 left-0 right-0 h-24 z-[60] shadow-2xl flex items-center">
+    <nav className="bg-secondary text-white fixed top-0 left-0 right-0 h-20 md:h-24 z-[60] shadow-2xl flex items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex justify-between items-center h-full">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center">
-                <div className="bg-white p-1 rounded-lg shadow-inner ring-1 ring-white/10 overflow-hidden">
+            <Link href="/" className="flex items-center gap-3">
+                <div className="bg-white p-1 rounded-lg shadow-inner ring-1 ring-white/10 overflow-hidden shrink-0">
                   <img 
                     src="/logo.png" 
                     alt="Friends Car Bazar" 
-                    className="h-12 md:h-16 w-auto object-contain"
+                    className="h-10 md:h-14 w-auto object-contain"
                   />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-white font-black text-[1.1rem] sm:text-xl tracking-tighter uppercase italic leading-none">Friends</span>
+                  <span className="text-primary font-black text-[10px] sm:text-xs tracking-widest uppercase mt-1 leading-none">Car Bazar</span>
                 </div>
             </Link>
           </div>
@@ -153,7 +157,7 @@ export default function Navbar() {
     </div>
     
     {/* Spacer for fixed header */}
-    <div className="h-24" />
+    <div className="h-20 md:h-24" />
     </>
   )
 }
