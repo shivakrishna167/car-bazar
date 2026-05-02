@@ -103,36 +103,36 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-center gap-2 md:gap-3 w-full">
-             <Link 
-               href="/admin/reviews" 
-               className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
-             >
-               <MessageSquare size={14} className="md:w-[18px] md:h-[18px]" /> Reviews
-             </Link>
-             <Link 
-               href="/admin/inquiries" 
-               className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
-             >
-               <MessageCircle size={14} className="md:w-[18px] md:h-[18px]" /> Inquiries
-             </Link>
-             <Link 
-               href="/admin/offers" 
-               className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
-             >
-               <Megaphone size={14} className="md:w-[18px] md:h-[18px]" /> Offers
-             </Link>
-             <Link 
-               href="/admin/add" 
-               className="bg-primary text-secondary px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold text-[10px] md:text-sm flex items-center justify-center gap-2 hover:bg-white transition-all shadow-xl shadow-primary/20"
-             >
-               <Plus size={14} className="md:w-[18px] md:h-[18px]" /> Add New
-             </Link>
-             <button 
-               onClick={handleLogout}
-               className="bg-red-500/10 text-red-500 border border-red-500/20 px-3 md:px-6 py-3 rounded-xl font-bold text-[10px] md:text-xs flex items-center justify-center gap-2 hover:bg-red-500 hover:text-white transition-all"
-             >
-               <LogOut size={14} className="md:w-[16px] md:h-[16px]" /> Logout
-             </button>
+            <Link
+              href="/admin/reviews"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
+            >
+              <MessageSquare size={14} className="md:w-[18px] md:h-[18px]" /> Reviews
+            </Link>
+            <Link
+              href="/admin/inquiries"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
+            >
+              <MessageCircle size={14} className="md:w-[18px] md:h-[18px]" /> Inquiries
+            </Link>
+            <Link
+              href="/admin/offers"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
+            >
+              <Megaphone size={14} className="md:w-[18px] md:h-[18px]" /> Offers
+            </Link>
+            <Link
+              href="/admin/add"
+              className="bg-primary text-secondary px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold text-[10px] md:text-sm flex items-center justify-center gap-2 hover:bg-white transition-all shadow-xl shadow-primary/20"
+            >
+              <Plus size={14} className="md:w-[18px] md:h-[18px]" /> Add New
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500/10 text-red-500 border border-red-500/20 px-3 md:px-6 py-3 rounded-xl font-bold text-[10px] md:text-xs flex items-center justify-center gap-2 hover:bg-red-500 hover:text-white transition-all"
+            >
+              <LogOut size={14} className="md:w-[16px] md:h-[16px]" /> Logout
+            </button>
           </div>
         </div>
       </div>
@@ -141,22 +141,22 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden">
           {/* Stats Bar */}
           <div className="grid grid-cols-3 border-b border-gray-100 bg-white">
-             <div className="p-4 md:p-8 text-center border-r border-gray-100">
-                <p className="text-gray-400 text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">Total</p>
-                <p className="text-lg md:text-4xl font-black text-secondary">{listings.length}</p>
-             </div>
-             <div className="p-4 md:p-8 text-center border-r border-gray-100">
-                <p className="text-gray-400 text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">Live</p>
-                <p className="text-lg md:text-4xl font-black text-green-500">
-                  {listings.filter(l => l.status === 'available').length}
-                </p>
-             </div>
-             <div className="p-4 md:p-8 text-center">
-                <p className="text-gray-400 text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">Sold</p>
-                <p className="text-lg md:text-4xl font-black text-red-500">
-                  {listings.filter(l => l.status === 'sold').length}
-                </p>
-             </div>
+            <div className="p-4 md:p-8 text-center border-r border-gray-100">
+              <p className="text-gray-400 text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">Total</p>
+              <p className="text-lg md:text-4xl font-black text-secondary">{listings.length}</p>
+            </div>
+            <div className="p-4 md:p-8 text-center border-r border-gray-100">
+              <p className="text-gray-400 text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">Live</p>
+              <p className="text-lg md:text-4xl font-black text-green-500">
+                {listings.filter(l => l.status === 'available').length}
+              </p>
+            </div>
+            <div className="p-4 md:p-8 text-center">
+              <p className="text-gray-400 text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1">Sold</p>
+              <p className="text-lg md:text-4xl font-black text-red-500">
+                {listings.filter(l => l.status === 'sold').length}
+              </p>
+            </div>
           </div>
 
           {/* Search & Action Bar */}

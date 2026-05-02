@@ -114,7 +114,23 @@ export const vehicleService = {
     if (error) throw error
     return true
   },
+  async cleanupOldSoldVehicles() {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    try {
+      await supabase
+        .from('listings')
+        .delete()
+        .eq('status', 'sold')
+        .lt('updated_at', oneDayAgo)
+    } catch (err) {
+      console.error("Failed to cleanup old sold vehicles:", err)
+    }
+  },
+
   async getAllListings() {
+    // Fire and forget background cleanup
+    this.cleanupOldSoldVehicles().catch(console.error)
+    
     return withTimeout(
       supabase
         .from('listings')
@@ -129,6 +145,9 @@ export const vehicleService = {
   },
 
   async getFeaturedListings() {
+    // Fire and forget background cleanup
+    this.cleanupOldSoldVehicles().catch(console.error)
+
     return withTimeout(
       supabase
         .from('listings')
@@ -167,7 +186,10 @@ export const vehicleService = {
   async updateVehicleStatus(id: string, status: 'available' | 'sold') {
     const { data, error } = await supabase
       .from('listings')
-      .update({ status })
+      .update({ 
+        status, 
+        updated_at: new Date().toISOString() 
+      })
       .eq('id', id)
       .select()
     
