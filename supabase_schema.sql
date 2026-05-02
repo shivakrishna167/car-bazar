@@ -174,3 +174,32 @@ CREATE POLICY "Users can update their own listings" ON public.listings
 DROP POLICY IF EXISTS "Users can delete their own listings" ON public.listings;
 CREATE POLICY "Users can delete their own listings" ON public.listings
     FOR DELETE USING (auth.uid() = seller_id);
+
+-- INQUIRIES / CONTACT FORM TABLE
+CREATE TABLE IF NOT EXISTS public.inquiries (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    interested_in TEXT NOT NULL,
+    message TEXT NOT NULL,
+    status TEXT DEFAULT 'new' CHECK (status IN ('new', 'replied')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS for inquiries
+ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
+
+-- Allow anyone to insert inquiries (public form)
+DROP POLICY IF EXISTS "Anyone can insert inquiries" ON public.inquiries;
+CREATE POLICY "Anyone can insert inquiries" ON public.inquiries
+    FOR INSERT WITH CHECK (true);
+
+-- Allow reading/updating only for admins (or public if no strict auth is set up yet)
+DROP POLICY IF EXISTS "Public can read inquiries" ON public.inquiries;
+CREATE POLICY "Public can read inquiries" ON public.inquiries
+    FOR SELECT USING (true); -- Note: In a production app, restrict to admins
+
+DROP POLICY IF EXISTS "Public can update inquiries" ON public.inquiries;
+CREATE POLICY "Public can update inquiries" ON public.inquiries
+    FOR UPDATE USING (true); -- Note: In a production app, restrict to admins

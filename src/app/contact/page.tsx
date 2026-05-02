@@ -1,9 +1,41 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react'
+import { Phone, Mail, MapPin, Send, MessageCircle, CheckCircle } from 'lucide-react'
+import { vehicleService } from '@/services/vehicleService'
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    full_name: '',
+    phone: '',
+    interested_in: 'Buying a Car',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      await vehicleService.submitInquiry(formData)
+      setIsSuccess(true)
+      setFormData({
+        full_name: '',
+        phone: '',
+        interested_in: 'Buying a Car',
+        message: ''
+      })
+      setTimeout(() => setIsSuccess(false), 5000)
+    } catch (err) {
+      console.error(err)
+      alert("Failed to send message. Please try WhatsApp instead.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-secondary flex flex-col pt-20">
       <main className="flex-grow pt-20 pb-48">
@@ -114,21 +146,53 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div className="bg-white p-12 rounded-[4rem] shadow-2xl">
-              <form className="space-y-6">
+            <div className="bg-white p-12 rounded-[4rem] shadow-2xl relative overflow-hidden">
+              {isSuccess ? (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center text-center p-8"
+                >
+                  <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-6">
+                    <CheckCircle size={40} />
+                  </div>
+                  <h3 className="text-2xl font-black text-secondary mb-2">Message Sent!</h3>
+                  <p className="text-gray-500 font-medium">Thank you for reaching out. We will get back to you shortly.</p>
+                </motion.div>
+              ) : null}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-secondary font-black text-[10px] uppercase tracking-widest ml-1">Full Name</label>
-                    <input type="text" placeholder="John Doe" className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm" />
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="John Doe" 
+                      className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm" 
+                      value={formData.full_name}
+                      onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-secondary font-black text-[10px] uppercase tracking-widest ml-1">Phone Number</label>
-                    <input type="tel" placeholder="+91 00000 00000" className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm" />
+                    <input 
+                      type="tel" 
+                      required
+                      placeholder="+91 00000 00000" 
+                      className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm" 
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-secondary font-black text-[10px] uppercase tracking-widest ml-1">Interested In</label>
-                  <select className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm appearance-none">
+                  <select 
+                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm appearance-none"
+                    value={formData.interested_in}
+                    onChange={(e) => setFormData({...formData, interested_in: e.target.value})}
+                  >
                     <option>Buying a Car</option>
                     <option>Buying a Bike</option>
                     <option>Financing Options</option>
@@ -137,10 +201,21 @@ export default function ContactPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-secondary font-black text-[10px] uppercase tracking-widest ml-1">Message</label>
-                  <textarea rows={4} placeholder="Tell us what you're looking for..." className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm resize-none"></textarea>
+                  <textarea 
+                    rows={4} 
+                    required
+                    placeholder="Tell us what you're looking for..." 
+                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm resize-none"
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  ></textarea>
                 </div>
-                <button className="w-full bg-secondary text-white py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 shadow-xl hover:bg-black transition-all">
-                  Send Message <Send size={18} />
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-secondary text-white py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 shadow-xl hover:bg-black transition-all disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Sending...' : <>Send Message <Send size={18} /></>}
                 </button>
               </form>
             </div>

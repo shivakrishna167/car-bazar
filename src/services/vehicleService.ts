@@ -38,6 +38,16 @@ export interface Review {
   created_at?: string
 }
 
+export interface Inquiry {
+  id: string
+  full_name: string
+  phone: string
+  interested_in: string
+  message: string
+  status: 'new' | 'replied'
+  created_at?: string
+}
+
 const DB_TIMEOUT = 15000 // 15 seconds
 
 async function withTimeout<T>(promise: Promise<T> | PromiseLike<T>, message: string): Promise<T> {
@@ -359,5 +369,37 @@ export const vehicleService = {
     if (typeof window === 'undefined') return false
     const favs = this.getLocalFavorites()
     return favs.includes(listingId)
+  },
+
+  // INQUIRIES
+  async submitInquiry(inquiry: Omit<Inquiry, 'id' | 'status' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('inquiries')
+      .insert([{ ...inquiry, status: 'new' }])
+      .select()
+    
+    if (error) throw error
+    return data[0] as Inquiry
+  },
+
+  async getInquiries() {
+    const { data, error } = await supabase
+      .from('inquiries')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data as Inquiry[]
+  },
+
+  async markInquiryReplied(id: string) {
+    const { data, error } = await supabase
+      .from('inquiries')
+      .update({ status: 'replied' })
+      .eq('id', id)
+      .select()
+    
+    if (error) throw error
+    return data[0] as Inquiry
   }
 }

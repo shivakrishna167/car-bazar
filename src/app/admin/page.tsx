@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Trash2, Edit3, CheckCircle, XCircle, LogOut, LayoutDashboard, Car, Bike, Search, Loader2, Megaphone, MessageSquare } from 'lucide-react'
+import { Plus, Trash2, Edit3, CheckCircle, XCircle, LogOut, LayoutDashboard, Car, Bike, Search, Loader2, Megaphone, MessageSquare, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -108,6 +108,12 @@ export default function AdminDashboard() {
                className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
              >
                <MessageSquare size={14} className="md:w-[18px] md:h-[18px]" /> Reviews
+             </Link>
+             <Link 
+               href="/admin/inquiries" 
+               className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 md:px-8 py-3 md:py-4 rounded-xl font-bold hover:bg-white/20 transition-all text-[10px] md:text-sm flex items-center justify-center gap-2"
+             >
+               <MessageCircle size={14} className="md:w-[18px] md:h-[18px]" /> Inquiries
              </Link>
              <Link 
                href="/admin/offers" 
