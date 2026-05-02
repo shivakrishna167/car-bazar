@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Trash2, Edit3, CheckCircle, XCircle, LogOut, LayoutDashboard, Car, Bike, Search, Loader2, Megaphone, MessageSquare, MessageCircle } from 'lucide-react'
+import { Plus, Trash2, Edit3, CheckCircle, XCircle, LogOut, LayoutDashboard, Car, Bike, Search, Loader2, Megaphone, MessageSquare, MessageCircle, History } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -145,6 +145,12 @@ export default function AdminDashboard() {
             >
               <LogOut size={14} className="md:w-[16px] md:h-[16px]" /> Logout
             </button>
+            <Link
+              href="/admin/history"
+              className="bg-purple-500/10 text-purple-500 border border-purple-500/20 px-3 md:px-6 py-3 rounded-xl font-bold text-[10px] md:text-xs flex items-center justify-center gap-2 hover:bg-purple-500 hover:text-white transition-all"
+            >
+              <History size={14} className="md:w-[16px] md:h-[16px]" /> History
+            </Link>
           </div>
         </div>
       </div>

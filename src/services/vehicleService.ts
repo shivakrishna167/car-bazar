@@ -280,6 +280,16 @@ export const vehicleService = {
     }
   },
 
+  async getSalesHistory() {
+    const { data, error } = await supabase
+      .from('sales_history')
+      .select('*')
+      .order('sold_at', { ascending: false })
+    
+    if (error) throw error
+    return data as SaleRecord[]
+  },
+
   async updateVehicle(id: string, vehicle: Partial<Vehicle>) {
     const { data, error } = await supabase
       .from('listings')
