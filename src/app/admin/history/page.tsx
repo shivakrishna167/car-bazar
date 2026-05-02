@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { History, ArrowLeft, Car, Bike, Search, Loader2, Calendar, IndianRupee } from 'lucide-react'
+import { History, ArrowLeft, Car, Bike, Search, Loader2, Calendar, IndianRupee, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -101,6 +101,12 @@ export default function SalesHistoryPage() {
           {/* Business Growth Stats */}
           {stats && (
             <div className="p-6 md:p-10 bg-secondary/5 border-b border-gray-100">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-2 bg-primary/20 rounded-lg text-primary">
+                  <LayoutDashboard size={20} />
+                </div>
+                <h2 className="text-xl font-black text-secondary uppercase tracking-tight">Business Growth</h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Weekly */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">

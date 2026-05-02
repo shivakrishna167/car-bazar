@@ -13,10 +13,8 @@ export default function AdminDashboard() {
   const [listings, setListings] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [hasSession, setHasSession] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const [search, setSearch] = useState('')
   const [mounted, setMounted] = useState(false)
-  const [search, setSearch] = useState('')
 
   useEffect(() => {
     setMounted(true)
