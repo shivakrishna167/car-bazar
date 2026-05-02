@@ -394,8 +394,9 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 w-full max-w-sm sm:max-w-none">
             <a 
-              href="https://maps.google.com" 
+              href="https://www.google.com/maps/search/?api=1&query=Near+Kotta+Busstand,+RR+Public+School+Beside,+Bypassroad+Khammam" 
               target="_blank" 
+              rel="noopener noreferrer"
               className="bg-secondary text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center justify-center gap-3 shadow-2xl"
             >
               Get Directions <ArrowRight />

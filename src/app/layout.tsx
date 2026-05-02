@@ -18,8 +18,10 @@ export const viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "FRIENDS CAR BAAZR | Best 2nd Hand Cars & Bikes in Khammam",
+  metadataBase: new URL('https://car-bazar-two.vercel.app'),
+  title: "FRIENDS CAR BAZAR | Best 2nd Hand Cars & Bikes in Khammam",
   description: "Buy and Sell quality second-hand cars and bikes in Khammam. Located near Kotta Busstand, RR Public School Beside, Bypassroad Khammam.",
+  keywords: ["second hand cars khammam", "used bikes khammam", "buy car khammam", "friends car bazar", "used cars in telangana", "pre-owned cars khammam"],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -28,6 +30,19 @@ export const metadata: Metadata = {
   },
   formatDetection: {
     telephone: true,
+  },
+  openGraph: {
+    title: "FRIENDS CAR BAZAR | Best 2nd Hand Cars & Bikes in Khammam",
+    description: "Buy and Sell quality second-hand cars and bikes in Khammam. Quality tested vehicles at best prices.",
+    url: 'https://car-bazar-two.vercel.app',
+    siteName: 'Friends Car Bazar',
+    locale: 'en_IN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "FRIENDS CAR BAZAR | Best 2nd Hand Cars & Bikes in Khammam",
+    description: "Buy and Sell quality second-hand cars and bikes in Khammam.",
   },
 };
 
