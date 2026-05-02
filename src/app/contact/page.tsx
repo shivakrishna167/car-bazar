@@ -169,7 +169,7 @@ export default function ContactPage() {
                       type="text" 
                       required
                       placeholder="John Doe" 
-                      className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm" 
+                      className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm text-secondary placeholder-gray-400" 
                       value={formData.full_name}
                       onChange={(e) => setFormData({...formData, full_name: e.target.value})}
                     />
@@ -180,7 +180,7 @@ export default function ContactPage() {
                       type="tel" 
                       required
                       placeholder="+91 00000 00000" 
-                      className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm" 
+                      className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm text-secondary placeholder-gray-400" 
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     />
@@ -189,7 +189,7 @@ export default function ContactPage() {
                 <div className="space-y-2">
                   <label className="text-secondary font-black text-[10px] uppercase tracking-widest ml-1">Interested In</label>
                   <select 
-                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm appearance-none"
+                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm text-secondary appearance-none"
                     value={formData.interested_in}
                     onChange={(e) => setFormData({...formData, interested_in: e.target.value})}
                   >
@@ -205,7 +205,7 @@ export default function ContactPage() {
                     rows={4} 
                     required
                     placeholder="Tell us what you're looking for..." 
-                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm resize-none"
+                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-primary/20 font-bold text-sm text-secondary placeholder-gray-400 resize-none"
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
                   ></textarea>
