@@ -58,7 +58,7 @@ export default function SearchFilters({ onFilterChange, brands, activeFilters }:
           <input 
             type="text"
             placeholder="Search make or model..."
-            className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all font-semibold"
+            className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all font-semibold text-secondary placeholder-gray-400"
             value={filters.search}
             onChange={(e) => handleSearch(e.target.value)}
           />
@@ -130,7 +130,7 @@ export default function SearchFilters({ onFilterChange, brands, activeFilters }:
               <input 
                 type="number" 
                 placeholder="Min" 
-                className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary focus:bg-white outline-none font-bold text-sm"
+                className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary focus:bg-white outline-none font-bold text-sm text-secondary placeholder-gray-400"
                 value={filters.minPrice}
                 onChange={(e) => handlePrice(e.target.value, filters.maxPrice)}
               />
@@ -138,7 +138,7 @@ export default function SearchFilters({ onFilterChange, brands, activeFilters }:
               <input 
                 type="number" 
                 placeholder="Max" 
-                className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary focus:bg-white outline-none font-bold text-sm"
+                className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary focus:bg-white outline-none font-bold text-sm text-secondary placeholder-gray-400"
                 value={filters.maxPrice}
                 onChange={(e) => handlePrice(filters.minPrice, e.target.value)}
               />
