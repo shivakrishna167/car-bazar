@@ -241,6 +241,9 @@ export default function SalesHistoryPage() {
           </div>
         </div>
       </div>
+      <div className="text-center mt-12 pb-12">
+        <p className="text-gray-300 font-bold text-[10px] uppercase tracking-[0.3em]">Version 2.1.0 • Updated May 3, 12:10 AM</p>
+      </div>
     </div>
   )
 }
