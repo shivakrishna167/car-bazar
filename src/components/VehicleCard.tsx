@@ -17,6 +17,7 @@ interface VehicleProps {
   price: number
   mileage: number
   image_url?: string
+  image_urls?: string[]
   fuel?: string
   district?: string
   location?: string
@@ -70,9 +71,9 @@ export default function VehicleCard({ vehicle }: { vehicle: VehicleProps }) {
     <div className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col h-full relative">
       <div className="relative">
         <div className="aspect-[16/10] bg-gray-200 relative overflow-hidden">
-          {vehicle.image_url ? (
+          {vehicle.image_urls?.[0] || vehicle.image_url ? (
             <Image 
-              src={vehicle.image_url} 
+              src={vehicle.image_urls?.[0] || vehicle.image_url!} 
               alt={`${vehicle.make} ${vehicle.model}`}
               fill
               className={`object-cover group-hover:scale-105 transition-transform duration-500 ${vehicle.status === 'sold' ? 'grayscale-[0.5] brightness-75' : ''}`}
