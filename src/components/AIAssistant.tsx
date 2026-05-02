@@ -54,30 +54,102 @@ export default function AIAssistant() {
     // Simulate AI Response
     setTimeout(() => {
       const lowerText = messageText.toLowerCase()
-      let isTeluguQuery = lowerText.includes('కార్') || lowerText.includes('బైక్') || lowerText.includes('ఎక్కడ') || lowerText.includes('మాట్లాడు') || currentLang === 'te'
-
-      let response = "I'm checking our inventory for you. We have some great cars and bikes near Kotta Busstand, Khammam. Are you looking for a specific brand?"
-      let voiceResponse = response
-
-      // Telugu Support
-      if (isTeluguQuery) {
+      
+      const hasTeluguChars = /[\u0C00-\u0C7F]/.test(messageText)
+      const wantsTelugu = lowerText.includes('తెలుగు') || lowerText.includes('telugu') || lowerText.includes('matladu') || lowerText.includes('మాట్లాడు') || lowerText.includes('naku') || lowerText.includes('chupinchu')
+      if (hasTeluguChars || wantsTelugu) {
         setCurrentLang('te')
-        response = "నమస్కారం! ఫ్రెండ్స్ కార్ బజార్ కి స్వాగతం. మీరు కార్లు లేదా బైక్‌ల కోసం వెతుకుతున్నారా? మేము ఖమ్మం కొత్త బస్టాండ్ దగ్గర ఉన్నాము."
-        voiceResponse = response
       }
-      // Specific Show All Logic
-      else if (lowerText.includes('show') && lowerText.includes('all') && lowerText.includes('car')) {
-        response = "Sure! I am opening the car inventory for you. Click the button below to see all available cars."
-        voiceResponse = "Sure, showing you all available cars now."
-      } else if (lowerText.includes('show') && lowerText.includes('all') && lowerText.includes('bike')) {
-        response = "Absolutely! Here is our full bike collection. Click the button below to explore."
-        voiceResponse = "Absolutely, showing you all available bikes now."
-      } else if (lowerText.includes('car')) {
-        response = "We have several premium cars like Hyundai Creta and Maruti Swift available. Would you like to see the full car inventory?"
-      } else if (lowerText.includes('bike')) {
-        response = "Our bike collection includes popular models in excellent condition. We have Pulsars, Activas and more. Should I show you the bikes?"
-      } else if (lowerText.includes('location') || lowerText.includes('where')) {
-        response = "We are located Near Kottha Busstand, RR Public School Beside, Bypass Road, Khammam, Telangana."
+      const isTelugu = currentLang === 'te' || hasTeluguChars || wantsTelugu
+
+      const isCarIntent = lowerText.includes('car') || lowerText.includes('కార్') || lowerText.includes('carla')
+      const isBikeIntent = lowerText.includes('bike') || lowerText.includes('బైక్')
+      const isShowIntent = lowerText.includes('show') || lowerText.includes('chupinchu') || lowerText.includes('చూపించు') || lowerText.includes('all') || lowerText.includes('inventory') || lowerText.includes('list')
+      const isLocationIntent = lowerText.includes('location') || lowerText.includes('where') || lowerText.includes('ఎక్కడ') || lowerText.includes('address') || lowerText.includes('ekada') || lowerText.includes('akkada')
+      const isPhoneIntent = lowerText.includes('phone') || lowerText.includes('number') || lowerText.includes('call') || lowerText.includes('contact') || lowerText.includes('ఫోన్') || lowerText.includes('నెంబర్')
+      const isLoanIntent = lowerText.includes('loan') || lowerText.includes('finance') || lowerText.includes('emi') || lowerText.includes('లోన్') || lowerText.includes('ఫైనాన్స్')
+      const isTimeIntent = lowerText.includes('time') || lowerText.includes('open') || lowerText.includes('close') || lowerText.includes('hours') || lowerText.includes('సమయం')
+      const isOwnerIntent = lowerText.includes('owner') || lowerText.includes('founder') || lowerText.includes('younus') || lowerText.includes('satyanarayana') || lowerText.includes('ఓనర్')
+
+      let response = ""
+      let voiceResponse = ""
+      let shouldNavigate = false
+      let navType = 'car'
+
+      if (isCarIntent && isShowIntent) {
+        shouldNavigate = true
+        navType = 'car'
+        if (isTelugu) {
+          response = "తప్పకుండా! మా వద్ద ఉన్న కార్లన్నీ మీకు చూపిస్తున్నాను."
+        } else {
+          response = "Sure! I am opening the car inventory for you. Showing all available cars now."
+        }
+        voiceResponse = response
+      } else if (isBikeIntent && isShowIntent) {
+        shouldNavigate = true
+        navType = 'bike'
+        if (isTelugu) {
+          response = "తప్పకుండా! మా వద్ద ఉన్న బైక్లన్నీ మీకు చూపిస్తున్నాను."
+        } else {
+          response = "Absolutely! Here is our full bike collection. Showing all available bikes now."
+        }
+        voiceResponse = response
+      } else if (isLocationIntent) {
+        if (isTelugu) {
+          response = "మేము ఖమ్మం కొత్త బస్టాండ్ దగ్గర, బైపాస్ రోడ్, RR పబ్లిక్ స్కూల్ పక్కన ఉన్నాము."
+        } else {
+          response = "We are located Near Kottha Busstand, RR Public School Beside, Bypass Road, Khammam, Telangana."
+        }
+        voiceResponse = response
+      } else if (isPhoneIntent) {
+        if (isTelugu) {
+          response = "మీరు మమ్మల్ని 9849575114 లేదా 9949904505 నంబర్లలో సంప్రదించవచ్చు."
+        } else {
+          response = "You can contact us at +91 9849575114 or +91 9949904505. We are always happy to help!"
+        }
+        voiceResponse = response
+      } else if (isLoanIntent) {
+        if (isTelugu) {
+          response = "అవును! మేము సులభమైన ఫైనాన్స్ మరియు EMI సౌకర్యాలను అందిస్తున్నాము. డాక్యుమెంట్లు ఇస్తే, అదే రోజు అప్రూవల్ వస్తుంది."
+        } else {
+          response = "Yes! We provide easy finance and EMI options with instant approval. Just bring your documents!"
+        }
+        voiceResponse = response
+      } else if (isTimeIntent) {
+        if (isTelugu) {
+          response = "మా షోరూమ్ ఉదయం 9 గంటల నుండి సాయంత్రం 8 గంటల వరకు తెరిచి ఉంటుంది. అన్ని రోజులు పని చేస్తాము."
+        } else {
+          response = "Our showroom is open every day from 9:00 AM to 8:00 PM."
+        }
+        voiceResponse = response
+      } else if (isOwnerIntent) {
+        if (isTelugu) {
+          response = "ఫ్రెండ్స్ కార్ బజార్ ను సయ్యద్ యూనుస్ మరియు పి. సత్యనారాయణ గారు నడుపుతున్నారు. వారికి 20 సంవత్సరాల అనుభవం ఉంది."
+        } else {
+          response = "Friends Car Bazar is co-founded and managed by Syed Younus and P. Satyanarayana, who have over 20 years of experience."
+        }
+        voiceResponse = response
+      } else if (isCarIntent) {
+        if (isTelugu) {
+          response = "మా వద్ద అనేక మంచి కార్లు ఉన్నాయి. మీరు మొత్తం కార్ల జాబితాను చూడాలనుకుంటున్నారా? (ఉదాహరణకు: 'కార్లను చూపించు' అని టైప్ చేయండి)"
+        } else {
+          response = "We have several premium cars available. Type 'show me cars' to see the full inventory!"
+        }
+        voiceResponse = response
+      } else if (isBikeIntent) {
+        if (isTelugu) {
+          response = "మా వద్ద మంచి కండిషన్ లో ఉన్న అనేక బైక్ లు ఉన్నాయి. టైప్ చేయండి: 'బైక్ లను చూపించు'."
+        } else {
+          response = "Our bike collection includes popular models in excellent condition. Type 'show me bikes' to explore them!"
+        }
+        voiceResponse = response
+      } else {
+        if (isTelugu) {
+           response = "నమస్కారం! మీరు కార్లు/బైక్ ల కోసం వెతుకుతున్నారా? ఫైనాన్స్ కావాలా? లేదా అడ్రస్ తెలుసుకోవాలా? మీరు నన్ను ఏమైనా అడగవచ్చు!"
+        } else {
+           response = "Hello! I can help you find cars, bikes, provide contact numbers, or explain our loan options. What do you need help with?"
+        }
+        voiceResponse = response
       }
 
       setMessages(prev => [...prev, { role: 'assistant', text: response }])
@@ -87,11 +159,9 @@ export default function AIAssistant() {
         speak(voiceResponse)
       }
 
-      // Auto-navigation for "Show All"
-      if (lowerText.includes('show') && lowerText.includes('all')) {
-        const type = lowerText.includes('car') ? 'car' : 'bike'
+      if (shouldNavigate) {
         setTimeout(() => {
-          window.location.href = `/listings?type=${type}`
+          window.location.href = `/listings?type=${navType}`
         }, 2000)
       }
     }, 1500)
