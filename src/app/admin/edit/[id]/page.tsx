@@ -25,7 +25,9 @@ export default function EditVehiclePage() {
     description: '',
     district: 'Khammam',
     location: '',
-    status: 'available'
+    status: 'available',
+    image_url: '',
+    image_urls: []
   })
 
   useEffect(() => {
@@ -40,7 +42,10 @@ export default function EditVehiclePage() {
       try {
         const data = await vehicleService.getVehicleById(id as string)
         const { id: _, created_at: __, ...rest } = data
-        setFormData(rest)
+        setFormData({
+          ...rest,
+          image_urls: rest.image_urls || (rest.image_url ? [rest.image_url] : [])
+        })
       } catch (err) {
         console.error(err)
         alert('Failed to load vehicle details')
@@ -57,7 +62,12 @@ export default function EditVehiclePage() {
     setSaving(true)
     
     try {
-      await vehicleService.updateVehicle(id as string, formData)
+      const submitData = {
+        ...formData,
+        image_url: formData.image_urls?.[0] || undefined,
+        image_urls: formData.image_urls
+      }
+      await vehicleService.updateVehicle(id as string, submitData)
       alert('Vehicle updated successfully!')
       router.push('/admin')
     } catch (err) {
@@ -225,37 +235,50 @@ export default function EditVehiclePage() {
               <label className="text-xs font-bold uppercase tracking-widest text-gray-400 block">Vehicle Images</label>
               
               <div className="flex flex-wrap gap-4">
-                {formData.image_url && (
-                  <div className="relative w-32 h-32 rounded-2xl overflow-hidden group shadow-xl border-4 border-white">
+                {formData.image_urls && formData.image_urls.map((url, index) => (
+                  <div key={index} className="relative w-32 h-32 rounded-2xl overflow-hidden group shadow-xl border-4 border-white">
                     <img 
-                      src={formData.image_url} 
-                      alt="Preview" 
+                      src={url} 
+                      alt={`Preview ${index + 1}`} 
                       className="w-full h-full object-cover"
                     />
                     <button 
                       type="button"
-                      onClick={() => setFormData({...formData, image_url: ''})}
+                      onClick={() => {
+                        const newUrls = [...(formData.image_urls || [])];
+                        newUrls.splice(index, 1);
+                        setFormData({...formData, image_urls: newUrls});
+                      }}
                       className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:scale-110 transition-transform"
                     >
                       <X size={14} />
                     </button>
+                    {index === 0 && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-primary/90 text-secondary text-[10px] font-black uppercase text-center py-1">Cover Image</div>
+                    )}
                   </div>
-                )}
+                ))}
                 
                 <label className="w-32 h-32 rounded-2xl border-4 border-dashed border-gray-100 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all group">
                   <input 
                     type="file" 
                     accept="image/*"
+                    multiple
                     className="hidden"
                     onChange={async (e) => {
-                      const file = e.target.files?.[0]
-                      if (!file) return
+                      const files = e.target.files
+                      if (!files || files.length === 0) return
                       
                       try {
                         setSaving(true)
-                        const url = await vehicleService.uploadImage(file)
-                        setFormData({...formData, image_url: url})
-                        alert('Image uploaded successfully!')
+                        const uploadPromises = Array.from(files).map(file => vehicleService.uploadImage(file))
+                        const urls = await Promise.all(uploadPromises)
+                        
+                        setFormData({
+                          ...formData, 
+                          image_urls: [...(formData.image_urls || []), ...urls]
+                        })
+                        alert('Images uploaded successfully!')
                       } catch (err: any) {
                         console.error(err)
                         alert(`Upload failed: ${err.message}`)

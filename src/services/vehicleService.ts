@@ -9,6 +9,7 @@ export interface Vehicle {
   price: number
   mileage: number
   image_url?: string
+  image_urls?: string[]
   description?: string
   status: 'available' | 'sold'
   fuel?: string

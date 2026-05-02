@@ -18,6 +18,7 @@ export default function VehicleDetailsPage() {
   const [loading, setLoading] = useState(true)
   const [isFav, setIsFav] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
 
   useEffect(() => {
     async function loadVehicle() {
@@ -111,7 +112,9 @@ export default function VehicleDetailsPage() {
               className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100"
             >
               <div className="aspect-[16/10] bg-gray-200 relative group">
-                {vehicle.image_url ? (
+                {(vehicle.image_urls && vehicle.image_urls.length > 0) ? (
+                  <Image src={vehicle.image_urls[activeImageIndex]} alt={vehicle.model} fill className="object-cover transition-opacity duration-300" />
+                ) : vehicle.image_url ? (
                   <Image src={vehicle.image_url} alt={vehicle.model} fill className="object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-secondary/5 text-secondary/20">
@@ -119,6 +122,20 @@ export default function VehicleDetailsPage() {
                   </div>
                 )}
               </div>
+              
+              {vehicle.image_urls && vehicle.image_urls.length > 1 && (
+                <div className="flex overflow-x-auto gap-4 p-4 scrollbar-hide">
+                  {vehicle.image_urls.map((url, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveImageIndex(index)}
+                      className={`relative w-24 h-24 shrink-0 rounded-2xl overflow-hidden border-4 transition-all ${activeImageIndex === index ? 'border-primary scale-105 shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                    >
+                      <Image src={url} alt={`${vehicle.model} - view ${index + 1}`} fill className="object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </motion.div>
 
             <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-gray-100">
