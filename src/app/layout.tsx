@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     title: "FRIENDS CAR BAZAR | Best 2nd Hand Cars & Bikes in Khammam",
     description: "Buy and Sell quality second-hand cars and bikes in Khammam.",
   },
+  verification: {
+    google: "uSaw_iPPcEeXeEAoThBw2O5A3cNe_yBmESnDzD9-AXw",
+  },
 };
 
 export default function RootLayout({
