@@ -77,25 +77,7 @@ export default function AIAssistant() {
       let shouldNavigate = false
       let navType = 'car'
 
-      if (isCarIntent && isShowIntent) {
-        shouldNavigate = true
-        navType = 'car'
-        if (isTelugu) {
-          response = "తప్పకుండా! మా వద్ద ఉన్న కార్లన్నీ మీకు చూపిస్తున్నాను."
-        } else {
-          response = "Sure! I am opening the car inventory for you. Showing all available cars now."
-        }
-        voiceResponse = response
-      } else if (isBikeIntent && isShowIntent) {
-        shouldNavigate = true
-        navType = 'bike'
-        if (isTelugu) {
-          response = "తప్పకుండా! మా వద్ద ఉన్న బైక్లన్నీ మీకు చూపిస్తున్నాను."
-        } else {
-          response = "Absolutely! Here is our full bike collection. Showing all available bikes now."
-        }
-        voiceResponse = response
-      } else if (isLocationIntent) {
+      if (isLocationIntent) {
         if (isTelugu) {
           response = "మేము ఖమ్మం కొత్త బస్టాండ్ దగ్గర, బైపాస్ రోడ్, RR పబ్లిక్ స్కూల్ పక్కన ఉన్నాము."
         } else {
@@ -131,17 +113,21 @@ export default function AIAssistant() {
         }
         voiceResponse = response
       } else if (isCarIntent) {
+        shouldNavigate = true
+        navType = 'car'
         if (isTelugu) {
-          response = "మా వద్ద అనేక మంచి కార్లు ఉన్నాయి. మీరు మొత్తం కార్ల జాబితాను చూడాలనుకుంటున్నారా? (ఉదాహరణకు: 'కార్లను చూపించు' అని టైప్ చేయండి)"
+          response = "తప్పకుండా! మా వద్ద ఉన్న కార్లన్నీ మీకు చూపిస్తున్నాను."
         } else {
-          response = "We have several premium cars available. Type 'show me cars' to see the full inventory!"
+          response = "Sure! I am opening the car inventory for you. Showing all available cars now."
         }
         voiceResponse = response
       } else if (isBikeIntent) {
+        shouldNavigate = true
+        navType = 'bike'
         if (isTelugu) {
-          response = "మా వద్ద మంచి కండిషన్ లో ఉన్న అనేక బైక్ లు ఉన్నాయి. టైప్ చేయండి: 'బైక్ లను చూపించు'."
+          response = "తప్పకుండా! మా వద్ద ఉన్న బైక్లన్నీ మీకు చూపిస్తున్నాను."
         } else {
-          response = "Our bike collection includes popular models in excellent condition. Type 'show me bikes' to explore them!"
+          response = "Absolutely! Here is our full bike collection. Showing all available bikes now."
         }
         voiceResponse = response
       } else if (isGreetingIntent) {
