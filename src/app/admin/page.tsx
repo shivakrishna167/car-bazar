@@ -17,7 +17,8 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('')
   const [stats, setStats] = useState<{
     weekly: { total: number, cars: number, bikes: number, revenue: number },
-    monthly: { total: number, cars: number, bikes: number, revenue: number }
+    monthly: { total: number, cars: number, bikes: number, revenue: number },
+    yearly: { total: number, cars: number, bikes: number, revenue: number }
   } | null>(null)
 
   useEffect(() => {
@@ -179,7 +180,7 @@ export default function AdminDashboard() {
                 </div>
                 <h2 className="text-xl font-black text-secondary uppercase tracking-tight">Business Growth</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Weekly */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                   <div className="flex justify-between items-start mb-4">
@@ -218,6 +219,27 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-2 border-l border-gray-100 pl-4">
                       <Bike size={14} className="text-primary" />
                       <span className="text-xs font-bold text-secondary">{stats.monthly.bikes} Bikes</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Yearly */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Last 12 Months</p>
+                      <h3 className="text-3xl font-black text-secondary">{stats.yearly.total} <span className="text-sm font-bold text-gray-400">Sold</span></h3>
+                    </div>
+                    <div className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">Yearly</div>
+                  </div>
+                  <div className="flex gap-4 border-t border-gray-50 pt-4 mt-4">
+                    <div className="flex items-center gap-2">
+                      <Car size={14} className="text-primary" />
+                      <span className="text-xs font-bold text-secondary">{stats.yearly.cars} Cars</span>
+                    </div>
+                    <div className="flex items-center gap-2 border-l border-gray-100 pl-4">
+                      <Bike size={14} className="text-primary" />
+                      <span className="text-xs font-bold text-secondary">{stats.yearly.bikes} Bikes</span>
                     </div>
                   </div>
                 </div>

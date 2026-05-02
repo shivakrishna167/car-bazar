@@ -252,9 +252,11 @@ export const vehicleService = {
     const now = new Date()
     const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
     const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
+    const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate())
 
     const weekly = sales.filter(s => s.sold_at && new Date(s.sold_at) >= oneWeekAgo)
     const monthly = sales.filter(s => s.sold_at && new Date(s.sold_at) >= oneMonthAgo)
+    const yearly = sales.filter(s => s.sold_at && new Date(s.sold_at) >= oneYearAgo)
 
     return {
       weekly: {
@@ -268,6 +270,12 @@ export const vehicleService = {
         cars: monthly.filter(s => s.type === 'car').length,
         bikes: monthly.filter(s => s.type === 'bike').length,
         revenue: monthly.reduce((sum, s) => sum + s.price, 0)
+      },
+      yearly: {
+        total: yearly.length,
+        cars: yearly.filter(s => s.type === 'car').length,
+        bikes: yearly.filter(s => s.type === 'bike').length,
+        revenue: yearly.reduce((sum, s) => sum + s.price, 0)
       }
     }
   },
