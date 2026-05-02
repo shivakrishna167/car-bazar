@@ -10,7 +10,7 @@ import VehicleCard from '@/components/VehicleCard'
 import ReviewSection from '@/components/ReviewSection'
 import OffersBanner from '@/components/OffersBanner'
 import VehicleSkeleton from '@/components/VehicleSkeleton'
-import { vehicleService, Vehicle } from '@/services/vehicleService'
+import { vehicleService, Vehicle, Offer } from '@/services/vehicleService'
 
 export default function Home() {
   const [featuredVehicles, setFeaturedVehicles] = useState<Vehicle[]>(() => {
