@@ -70,6 +70,7 @@ export default function AIAssistant() {
       const isLoanIntent = lowerText.includes('loan') || lowerText.includes('finance') || lowerText.includes('emi') || lowerText.includes('లోన్') || lowerText.includes('ఫైనాన్స్')
       const isTimeIntent = lowerText.includes('time') || lowerText.includes('open') || lowerText.includes('close') || lowerText.includes('hours') || lowerText.includes('సమయం')
       const isOwnerIntent = lowerText.includes('owner') || lowerText.includes('founder') || lowerText.includes('younus') || lowerText.includes('satyanarayana') || lowerText.includes('ఓనర్')
+      const isGreetingIntent = lowerText === 'hi' || lowerText.includes('hello') || lowerText.includes('hey') || lowerText.includes('namaste') || lowerText.includes('హాయ్') || lowerText.includes('నమస్తే')
 
       let response = ""
       let voiceResponse = ""
@@ -143,11 +144,18 @@ export default function AIAssistant() {
           response = "Our bike collection includes popular models in excellent condition. Type 'show me bikes' to explore them!"
         }
         voiceResponse = response
-      } else {
+      } else if (isGreetingIntent) {
         if (isTelugu) {
            response = "నమస్కారం! మీరు కార్లు/బైక్ ల కోసం వెతుకుతున్నారా? ఫైనాన్స్ కావాలా? లేదా అడ్రస్ తెలుసుకోవాలా? మీరు నన్ను ఏమైనా అడగవచ్చు!"
         } else {
            response = "Hello! I can help you find cars, bikes, provide contact numbers, or explain our loan options. What do you need help with?"
+        }
+        voiceResponse = response
+      } else {
+        if (isTelugu) {
+           response = "క్షమించండి, నాకు అర్థం కాలేదు. దయచేసి మళ్ళీ చెప్పండి."
+        } else {
+           response = "I didn't quite catch that. Could you please tell me again?"
         }
         voiceResponse = response
       }
@@ -213,7 +221,7 @@ export default function AIAssistant() {
     }
 
     const recognition = new SpeechRecognition()
-    recognition.lang = 'en-IN'
+    recognition.lang = currentLang === 'te' ? 'te-IN' : 'en-IN'
     recognition.interimResults = false
     recognition.maxAlternatives = 1
 
@@ -231,6 +239,15 @@ export default function AIAssistant() {
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error)
       setIsListening(false)
+      
+      let errorMsg = currentLang === 'te' 
+        ? "మీ వాయిస్ నాకు సరిగ్గా వినిపించలేదు. దయచేసి మళ్ళీ చెప్పండి." 
+        : "I couldn't hear your voice clearly. Please tell me again."
+        
+      setMessages(prev => [...prev, { role: 'assistant', text: errorMsg }])
+      if (isVoiceEnabled) {
+        speak(errorMsg)
+      }
     }
 
     recognition.onend = () => {
