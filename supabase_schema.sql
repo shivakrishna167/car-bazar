@@ -203,3 +203,23 @@ CREATE POLICY "Public can read inquiries" ON public.inquiries
 DROP POLICY IF EXISTS "Public can update inquiries" ON public.inquiries;
 CREATE POLICY "Public can update inquiries" ON public.inquiries
     FOR UPDATE USING (true); -- Note: In a production app, restrict to admins
+
+-- SALES HISTORY TABLE
+CREATE TABLE IF NOT EXISTS public.sales_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    listing_id UUID,
+    type TEXT NOT NULL CHECK (type IN ('car', 'bike')),
+    make TEXT NOT NULL,
+    model TEXT NOT NULL,
+    price BIGINT NOT NULL,
+    sold_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE public.sales_history ENABLE ROW LEVEL SECURITY;
+
+-- Only admins should read/write sales history (for now allowing all for simplicity)
+DROP POLICY IF EXISTS "Public can manage sales history" ON public.sales_history;
+CREATE POLICY "Public can manage sales history" ON public.sales_history
+    FOR ALL USING (true);

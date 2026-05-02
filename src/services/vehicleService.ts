@@ -48,6 +48,16 @@ export interface Inquiry {
   created_at?: string
 }
 
+export interface SaleRecord {
+  id?: string
+  listing_id: string
+  type: 'car' | 'bike'
+  make: string
+  model: string
+  price: number
+  sold_at?: string
+}
+
 const DB_TIMEOUT = 15000 // 15 seconds
 
 async function withTimeout<T>(promise: Promise<T> | PromiseLike<T>, message: string): Promise<T> {
@@ -184,6 +194,10 @@ export const vehicleService = {
   },
 
   async updateVehicleStatus(id: string, status: 'available' | 'sold') {
+    // 1. Fetch current vehicle data for history
+    const vehicle = await this.getVehicleById(id)
+
+    // 2. Update status in listings table
     const { data, error } = await supabase
       .from('listings')
       .update({ 
@@ -194,7 +208,68 @@ export const vehicleService = {
       .select()
     
     if (error) throw error
+
+    // 3. Update Sales History
+    if (status === 'sold') {
+      await this.recordSale({
+        listing_id: vehicle.id,
+        type: vehicle.type,
+        make: vehicle.make,
+        model: vehicle.model,
+        price: vehicle.price
+      })
+    } else {
+      await this.removeSaleHistory(id)
+    }
+
     return data[0] as Vehicle
+  },
+
+  async recordSale(sale: SaleRecord) {
+    const { error } = await supabase
+      .from('sales_history')
+      .insert([sale])
+    if (error) throw error
+  },
+
+  async removeSaleHistory(listingId: string) {
+    const { error } = await supabase
+      .from('sales_history')
+      .delete()
+      .eq('listing_id', listingId)
+    if (error) throw error
+  },
+
+  async getSalesStats() {
+    const { data, error } = await supabase
+      .from('sales_history')
+      .select('*')
+      .order('sold_at', { ascending: false })
+    
+    if (error) throw error
+    const sales = data as SaleRecord[]
+
+    const now = new Date()
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
+
+    const weekly = sales.filter(s => s.sold_at && new Date(s.sold_at) >= oneWeekAgo)
+    const monthly = sales.filter(s => s.sold_at && new Date(s.sold_at) >= oneMonthAgo)
+
+    return {
+      weekly: {
+        total: weekly.length,
+        cars: weekly.filter(s => s.type === 'car').length,
+        bikes: weekly.filter(s => s.type === 'bike').length,
+        revenue: weekly.reduce((sum, s) => sum + s.price, 0)
+      },
+      monthly: {
+        total: monthly.length,
+        cars: monthly.filter(s => s.type === 'car').length,
+        bikes: monthly.filter(s => s.type === 'bike').length,
+        revenue: monthly.reduce((sum, s) => sum + s.price, 0)
+      }
+    }
   },
 
   async updateVehicle(id: string, vehicle: Partial<Vehicle>) {
