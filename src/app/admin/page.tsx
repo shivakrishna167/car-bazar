@@ -15,11 +15,8 @@ export default function AdminDashboard() {
   const [hasSession, setHasSession] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [search, setSearch] = useState('')
-  const [stats, setStats] = useState<{
-    weekly: { total: number, cars: number, bikes: number, revenue: number },
-    monthly: { total: number, cars: number, bikes: number, revenue: number },
-    yearly: { total: number, cars: number, bikes: number, revenue: number }
-  } | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     setMounted(true)
@@ -37,15 +34,11 @@ export default function AdminDashboard() {
   async function loadListings() {
     setLoading(true)
     try {
-      const [listingsData, statsData] = await Promise.all([
-        vehicleService.getAllListings(),
-        vehicleService.getSalesStats()
-      ])
-      setListings(listingsData)
-      setStats(statsData)
+      const data = await vehicleService.getAllListings()
+      setListings(data)
     } catch (err) {
       console.error(err)
-      alert('Failed to load dashboard data')
+      alert('Failed to load inventory')
     } finally {
       setLoading(false)
     }
@@ -70,9 +63,6 @@ export default function AdminDashboard() {
       setListings(listings.map(l =>
         l.id === id ? { ...l, status: newStatus } : l
       ))
-      // Refresh stats after status change
-      const newStats = await vehicleService.getSalesStats()
-      setStats(newStats)
     } catch (err) {
       console.error(err)
       alert('Failed to update status')
@@ -177,81 +167,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Business Growth Stats */}
-          {stats && (
-            <div className="p-6 md:p-10 bg-secondary/5 border-b border-gray-100">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="p-2 bg-primary/20 rounded-lg text-primary">
-                  <LayoutDashboard size={20} />
-                </div>
-                <h2 className="text-xl font-black text-secondary uppercase tracking-tight">Business Growth</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Weekly */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Last 7 Days</p>
-                      <h3 className="text-3xl font-black text-secondary">{stats.weekly.total} <span className="text-sm font-bold text-gray-400">Sold</span></h3>
-                    </div>
-                    <div className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">Weekly</div>
-                  </div>
-                  <div className="flex gap-4 border-t border-gray-50 pt-4 mt-4">
-                    <div className="flex items-center gap-2">
-                      <Car size={14} className="text-primary" />
-                      <span className="text-xs font-bold text-secondary">{stats.weekly.cars} Cars</span>
-                    </div>
-                    <div className="flex items-center gap-2 border-l border-gray-100 pl-4">
-                      <Bike size={14} className="text-primary" />
-                      <span className="text-xs font-bold text-secondary">{stats.weekly.bikes} Bikes</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Monthly */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Last 30 Days</p>
-                      <h3 className="text-3xl font-black text-secondary">{stats.monthly.total} <span className="text-sm font-bold text-gray-400">Sold</span></h3>
-                    </div>
-                    <div className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">Monthly</div>
-                  </div>
-                  <div className="flex gap-4 border-t border-gray-50 pt-4 mt-4">
-                    <div className="flex items-center gap-2">
-                      <Car size={14} className="text-primary" />
-                      <span className="text-xs font-bold text-secondary">{stats.monthly.cars} Cars</span>
-                    </div>
-                    <div className="flex items-center gap-2 border-l border-gray-100 pl-4">
-                      <Bike size={14} className="text-primary" />
-                      <span className="text-xs font-bold text-secondary">{stats.monthly.bikes} Bikes</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Yearly */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Last 12 Months</p>
-                      <h3 className="text-3xl font-black text-secondary">{stats.yearly.total} <span className="text-sm font-bold text-gray-400">Sold</span></h3>
-                    </div>
-                    <div className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">Yearly</div>
-                  </div>
-                  <div className="flex gap-4 border-t border-gray-50 pt-4 mt-4">
-                    <div className="flex items-center gap-2">
-                      <Car size={14} className="text-primary" />
-                      <span className="text-xs font-bold text-secondary">{stats.yearly.cars} Cars</span>
-                    </div>
-                    <div className="flex items-center gap-2 border-l border-gray-100 pl-4">
-                      <Bike size={14} className="text-primary" />
-                      <span className="text-xs font-bold text-secondary">{stats.yearly.bikes} Bikes</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
 
           {/* Search & Action Bar */}
           <div className="p-8 bg-gray-50/50 flex flex-col md:flex-row justify-between items-center gap-6">
